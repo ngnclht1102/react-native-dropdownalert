@@ -18,18 +18,18 @@
 5. [Props](docs/PROPS.md)
 6. [Caveats](#caveats)
 
-A simple alert to notify users about new chat messages, something went wrong or everything is ok. It can be closed by tap, cancel button, automatically with `closeInterval`, pan responder up gesture or programmatically (```this.dropDownAlertRef.closeAction()```).
+A simple alert to notify users about new chat messages, something went wrong or everything is ok. It can be closed by tap, cancel button, automatically with `closeInterval`, pan responder up gesture or programmatically (`this.dropDownAlertRef.closeAction()`).
 
 ### Support
 
-| react-native version | package version | reason |
-| ---- | :---: | ---- |
-| 0.50.0 | >=3.2.0 | Added SafeAreaView (iPhone X) |
-| 0.44.0 | >=2.12.0 | Added ViewPropTypes |
+| react-native version | package version | reason                        |
+| -------------------- | :-------------: | ----------------------------- |
+| 0.50.0               |     >=3.2.0     | Added SafeAreaView (iPhone X) |
+| 0.44.0               |    >=2.12.0     | Added ViewPropTypes           |
 
 ### Installation
 
-```npm i react-native-dropdownalert --save```
+`npm i react-native-dropdownalert --save`
 
 ### Demo
 
@@ -38,28 +38,37 @@ A simple alert to notify users about new chat messages, something went wrong or 
 ### Usage
 
 ```javascript
-import DropdownAlert from 'react-native-dropdownalert';
+import DropdownAlert from "react-native-dropdownalert";
 export default class App extends Component {
   componentDidMount() {
     this._fetchData();
   }
   _fetchData = async () => {
     try {
-      await fetch('https://mywebsite.com/endpoint/');
-      // alertWithType parameters: type, title, message, payload, interval.
+      await fetch("https://mywebsite.com/endpoint/");
+      // alertWithType parameters: type, title, message, payload, interval, callback.
       // There are 4 pre-defined types: info, warn, success, error.
       // payload object with source property overrides image source prop. (optional)
       // interval overrides closeInterval prop. (optional)
-      this.dropDownAlertRef.alertWithType('success', 'Success', 'Fetch data is complete.');
+      this.dropDownAlertRef.alertWithType(
+        "success",
+        "Success",
+        "Fetch data is complete.",
+        payload,
+        interval,
+        (payload) => {
+          console.log('on clicked)
+        }
+      );
     } catch (error) {
-      this.dropDownAlertRef.alertWithType('error', 'Error', error.message);
+      this.dropDownAlertRef.alertWithType("error", "Error", error.message);
     }
   };
   render() {
     // Make sure DropdownAlert is the last component in the document tree.
     return (
       <View>
-        <DropdownAlert ref={ref => this.dropDownAlertRef = ref} />
+        <DropdownAlert ref={ref => (this.dropDownAlertRef = ref)} />
       </View>
     );
   }
@@ -68,11 +77,11 @@ export default class App extends Component {
 
 ### Caveats
 
-* Modals can overlap DropdownAlert if it's not inside the modal's document tree.
-* It is important you place the `DropdownAlert` **ABOVE** the `StackNavigator`.
-  * [DropdownHolder example #1](https://gist.github.com/testshallpass/d76c656874e417bef4e0e6a63fc492af)
-  * [DropdownHolder example #2](https://gist.github.com/testshallpass/6c6c867269348c485a1e0d6ae3f55e90)
-  * [Redux + router flux example](https://gist.github.com/testshallpass/13f047205d1b966f55340b8962fe99c0)
-  * Repo: [react-native-dropdownalert-router-sample](https://github.com/mitsuruog/react-native-dropdownalert-router-sample) Thanks @mitsuruog and @articolo
+- Modals can overlap DropdownAlert if it's not inside the modal's document tree.
+- It is important you place the `DropdownAlert` **ABOVE** the `StackNavigator`.
+  - [DropdownHolder example #1](https://gist.github.com/testshallpass/d76c656874e417bef4e0e6a63fc492af)
+  - [DropdownHolder example #2](https://gist.github.com/testshallpass/6c6c867269348c485a1e0d6ae3f55e90)
+  - [Redux + router flux example](https://gist.github.com/testshallpass/13f047205d1b966f55340b8962fe99c0)
+  - Repo: [react-native-dropdownalert-router-sample](https://github.com/mitsuruog/react-native-dropdownalert-router-sample) Thanks @mitsuruog and @articolo
 
 > Inspired by: [RKDropdownAlert](https://github.com/cwRichardKim/RKDropdownAlert)
