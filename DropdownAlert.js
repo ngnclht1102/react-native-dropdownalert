@@ -263,7 +263,9 @@ export default class DropdownAlert extends Component {
     message = "",
     payload = {},
     interval = 1,
-    onTap
+    onTap,
+    renderImageContext,
+    render2ndImageContext
   ) => {
     if (this.animationLock) {
       return;
@@ -283,7 +285,9 @@ export default class DropdownAlert extends Component {
       message: this.getStringValue(message),
       payload,
       interval: duration,
-      onTap: onTap
+      onTap: onTap,
+      renderImageContext: renderImageContext,
+      render2ndImageContext: render2ndImageContext
     };
     // replaceEnabled
     // True: alert is closed then replaced by another alert. (default)
@@ -307,7 +311,7 @@ export default class DropdownAlert extends Component {
   };
   open = (data = {}, duration) => {
     this.alertData = data;
-    this.setState({ isOpen: true });
+    this.setState({ isOpen: true, renderImageContext: data.renderImageContext, render2ndImageContext: data.render2ndImageContext });
     this.animate(1, 450, () => {
       this.animationLock = false;
       if (duration > 0) {
@@ -492,6 +496,9 @@ export default class DropdownAlert extends Component {
     }
   }
   _renderImage(source) {
+    if (this.state.renderImageContext) {
+      return this.state.renderImageContext(this.props, this.alertData);
+    }
     if (this.props.renderImage) {
       return this.props.renderImage(this.props, this.alertData);
     }
@@ -502,6 +509,23 @@ export default class DropdownAlert extends Component {
       />
     );
   }
+
+  _render2ndImage(source) {
+    if (this.state.render2ndImageContext) {
+      return this.state.render2ndImageContext(this.props, this.alertData);
+    }
+    if (this.props.render2NdImage) {
+      return this.props.renderImage(this.props, this.alertData);
+    }
+    if (!this.props.image2ndStyle) return null
+    return (
+      <ImageView
+        style={StyleSheet.flatten(this.props.image2ndStyle)}
+        source={source}
+      />
+    );
+  }
+
   _renderTitle() {
     if (this.props.renderTitle) {
       return this.props.renderTitle(this.props, this.alertData);
@@ -516,6 +540,7 @@ export default class DropdownAlert extends Component {
       />
     );
   }
+
   _renderMessage() {
     if (this.props.renderMessage) {
       return this.props.renderMessage(this.props, this.alertData);
@@ -643,6 +668,7 @@ export default class DropdownAlert extends Component {
               </View>
             </ContentView>
             {this._renderCancel(showCancel)}
+            {this._render2ndImage()}
           </View>
         </TouchableOpacity>
       </Animated.View>
